@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <thread>
+#include "file_logger.h"
 
 class CCPU;
 class CTimer;
@@ -22,5 +23,6 @@ public slots:
 private:
 	CCPU* __cpu;
 	CTimer* __timer;
-	std::thread __timer_thread;
+	CFileLogger __logger;
+	std::thread* __timer_thread;
 };

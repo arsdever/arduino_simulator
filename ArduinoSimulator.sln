@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application", "src\application\application.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "arduino_uno", "src\arduino_uno\arduino_uno.vcxproj", "{C400034E-E2C5-40C8-B47E-2C985331AB31}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "src\core\core.vcxproj", "{3EF31140-6D38-4155-8EA4-A2B11EBE9124}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cpu", "src\cpu\cpu.vcxproj", "{5F87CF09-F9DA-4284-AB54-F72149F34B84}"
@@ -23,10 +21,6 @@ Global
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.Build.0 = Debug|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.Build.0 = Release|x64
-		{C400034E-E2C5-40C8-B47E-2C985331AB31}.Debug|x64.ActiveCfg = Debug|x64
-		{C400034E-E2C5-40C8-B47E-2C985331AB31}.Debug|x64.Build.0 = Debug|x64
-		{C400034E-E2C5-40C8-B47E-2C985331AB31}.Release|x64.ActiveCfg = Release|x64
-		{C400034E-E2C5-40C8-B47E-2C985331AB31}.Release|x64.Build.0 = Release|x64
 		{3EF31140-6D38-4155-8EA4-A2B11EBE9124}.Debug|x64.ActiveCfg = Debug|x64
 		{3EF31140-6D38-4155-8EA4-A2B11EBE9124}.Debug|x64.Build.0 = Debug|x64
 		{3EF31140-6D38-4155-8EA4-A2B11EBE9124}.Release|x64.ActiveCfg = Release|x64

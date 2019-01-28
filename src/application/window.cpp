@@ -1,17 +1,19 @@
 #include "window.h"
 
 #include <cpu>
+#include <ram>
+#include "../cpu/avr_base.h"
 #include <QFile>
 #include <QElapsedTimer>
 #include <windows.h>
 
 CWindow::CWindow(QWidget* parent)
 	: QLabel(parent)
-	, __cpu(new CCPU(new CRAM(0x7FFF)))
+	, __cpu(new CAVRBase(0x8000, 2048, 1024, 160))
+	, __logger("./overall.log")
 	, __timer(new CTimer(__cpu))
-	, __timer_thread(&CTimer::run, __timer)
 {
-	SetThreadPriority(__timer_thread.native_handle(), 15);
+	SetThreadPriority(__timer_thread->native_handle(), 15);
 	QFile memory_model("./memory");
 	if (!memory_model.open(QIODevice::ReadOnly))
 		return;
@@ -32,21 +34,24 @@ CWindow::CWindow(QWidget* parent)
 
 		for (int i = 0; i < size; ++i)
 		{
-			__cpu->Ram()->operator[]<quint8>(address + i) = memory_model.read(2).toShort(&ok, 16);
+			__cpu->GetRam()->operator[]<quint8>(address + i) = memory_model.read(2).toShort(&ok, 16);
 		}
 		memory_model.read(4);
 	}
 
-	__cpu->Restart();
-	connect(__cpu, SIGNAL(IOChanged()), this, SLOT(UpdateInfo()));
-	__timer_thread.detach();
+	__cpu->Init();
+	connect(__cpu, SIGNAL(IOChanged(quint32)), this, SLOT(UpdateInfo()));
+	__timer_thread = new std::thread(&CTimer::run, __timer);
+	__timer_thread->detach();
 }
 
 CWindow::~CWindow()
 {
+	delete __timer_thread;
+	delete __timer;
 }
 
 void CWindow::UpdateInfo()
 {
-	setText(tr("%1").arg(__cpu->m_sState.IOR[5], 20, 2, QChar(' ')));
+	setText(tr("%1").arg(__cpu->GetIOPorts()[5], 20, 2, QChar(' ')));
 }

@@ -1,7 +1,8 @@
 #include "timer.h"
 
 #include <cpu>
-#include <QElapsedTimer>
+#include <chrono>
+#include <thread>
 
 CTimer::CTimer(CCPU* cpu)
 	: __cpu(cpu)
@@ -9,15 +10,10 @@ CTimer::CTimer(CCPU* cpu)
 
 void CTimer::run()
 {
-	QElapsedTimer timer_core;
-	timer_core.start();
 	while (1)
 	{
-		if (timer_core.nsecsElapsed() >= 62)
-		{
-			++__cpu->GetIOPorts()[0x26];
-			__cpu->Step();
-			timer_core.restart();
-		}
+		__cpu->Tick();
+		std::this_thread::sleep_for(std::chrono::microseconds(1));
+		++__cpu->GetIOPorts()[0x26];
 	}
 }

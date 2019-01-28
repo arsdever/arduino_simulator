@@ -106,11 +106,13 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="avr_base.cpp" />
     <ClCompile Include="cpu.cpp" />
     <ClCompile Include="io_controller.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="avr_base.h" />
     <ClInclude Include="io_controller.h" />
     <ClInclude Include="timer.h" />
     <QtMoc Include="cpu.h" />

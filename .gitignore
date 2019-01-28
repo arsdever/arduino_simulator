@@ -1,6 +1,7 @@
 build
 .vs
 src/receiver
+*.log
 
 # C++ objects and libs
 *.slo
