@@ -16,6 +16,7 @@ public:
 	CCore(QObject* pParent = nullptr);
 
 	void RegisterInterface(vm::IUnknown* pInterface);
+	void UnregisterInterface(vm::IUnknown* pInterface);
 
 	template <typename T>
 	QSet<T*>  QueryInterface();

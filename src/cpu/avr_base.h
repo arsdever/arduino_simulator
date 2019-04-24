@@ -66,7 +66,7 @@ class CPU_EXPORT CAVRBase : public CCPU
 		void SetFlagRegister(quint32 flgs) override { FLAGS = flgs; }
 
 		quint8* GetGeneralRegisterSet() const override { return GR; }
-		quint8 GetGeneralRegisterCount() const { return 32; }
+		quint8 GetGeneralRegisterCount() const override { return 32; }
 		quint8* GetAddressRegisterSet() const override { return nullptr; }
 		quint8 GetAddressRegisterCount() const override { return 0; }
 	

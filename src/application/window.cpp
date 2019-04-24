@@ -4,19 +4,24 @@
 #include <ram>
 #include "../cpu/avr_base.h"
 #include <QFile>
+#include <QLabel>
 #include <QElapsedTimer>
+#include <QStatusBar>
 #include <windows.h>
 
 CWindow::CWindow(QWidget* parent)
-	: QLabel(parent)
+	: QMainWindow(parent)
 	, __cpu(new CAVRBase(0x8000, 2048, 1024, 160))
 	, __logger("./overall.log")
 	, __timer(new CTimer(__cpu))
 {
-	SetThreadPriority(__timer_thread->native_handle(), 15);
 	QFile memory_model("./memory");
 	if (!memory_model.open(QIODevice::ReadOnly))
 		return;
+
+	setCentralWidget(new QLabel);
+	setStatusBar(new QStatusBar);
+	connect(__timer, SIGNAL(tick()), this, SLOT(updateStatusBar()));
 
 	while (!memory_model.atEnd())
 	{
@@ -41,17 +46,22 @@ CWindow::CWindow(QWidget* parent)
 
 	__cpu->Init();
 	connect(__cpu, SIGNAL(IOChanged(quint32)), this, SLOT(UpdateInfo()));
-	__timer_thread = new std::thread(&CTimer::run, __timer);
-	__timer_thread->detach();
+	__timer->start();
 }
 
 CWindow::~CWindow()
 {
-	delete __timer_thread;
 	delete __timer;
+	delete __cpu;
 }
 
 void CWindow::UpdateInfo()
 {
-	setText(tr("%1").arg(__cpu->GetIOPorts()[5], 20, 2, QChar(' ')));
+	QLabel* label = qobject_cast<QLabel *>(centralWidget());
+	label->setText(tr("%1").arg(__cpu->GetIOPorts()[5], 20, 2, QChar(' ')));
+}
+
+void CWindow::updateStatusBar()
+{
+	statusBar()->showMessage(QString("Time elapsed : %2ms").arg(__timer->msecElapsed()));
 }

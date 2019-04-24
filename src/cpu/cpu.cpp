@@ -13,6 +13,8 @@
 #include <QString>
 #include <QUuid>
 
+#include <sstream>
+
 #define TICK_DURATION 600
 
 CCPU::CCPU()
@@ -20,6 +22,7 @@ CCPU::CCPU()
 	, __tick_count(0)
 	, __last_inst_tick_count(0)
 	, __inst_duration(0)
+	, __creation_time(std::chrono::high_resolution_clock::now())
 {
 }
 
@@ -44,14 +47,10 @@ void CCPU::Run()
 	{
 		Step();
 	}
-
-	CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("Execution stopped.")));
 }
 
 void CCPU::Step()
 {
-	CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("Running 0x%1").arg(GetState()->ProgramCounter(), 8, 16, QChar('0'))));
-
 	Fetch();
 	Decode();
 	SetInstrucitonDuration(Execute());
@@ -59,8 +58,9 @@ void CCPU::Step()
 
 void CCPU::Tick()
 {
+	CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("Tick : %1").arg(__tick_count)));
 	++__tick_count;
-	if (__tick_count - __last_inst_tick_count >= __inst_duration)
+	//if (__tick_count - __last_inst_tick_count >= __inst_duration)
 		Step();
 }
 

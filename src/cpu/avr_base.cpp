@@ -23,8 +23,6 @@ void CAVRBase::Fetch()
 
 void CAVRBase::Step()
 {
-	CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("Running 0x%1").arg(__state.PC, 8, 16, QChar('0'))));
-
 	Fetch();
 	__state.PC += Decode();
 	SetInstrucitonDuration(Execute());
@@ -571,6 +569,7 @@ quint8 CAVRBase::BRANCH_exec()
 quint8 CAVRBase::BREAK_exec()
 {
 	__state.RUN = false;
+	CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("BREAK")));
 	return 1;
 }
 
@@ -578,12 +577,13 @@ quint8 CAVRBase::JMP_exec()
 {
 	if (__state.IR[0] & 0x0002)	// CALL
 	{
-		CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("call 0x%1, SP 0x%2 -> 0x%3")
-			.arg(__state.IR[1] * 2, 8, 16, QChar('0'))
-			.arg(__state.SP, 8, 16, QChar('0'))
-			.arg(__state.SP - 2, 8, 16, QChar('0'))));
 		__state.SP -= 2;
 		__ram->operator[]<quint16>(__state.SP) = __state.PC;
+		CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("CALL : 0x%1").arg(__state.IR[1] * 2, 4, 16, QChar('0'))));
+	}
+	else
+	{	
+		CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("JMP : 0x%1").arg(__state.IR[1] * 2, 4, 16, QChar('0'))));
 	}
 
 	__state.PC = __state.IR[1] * 2;
@@ -697,11 +697,15 @@ quint8 CAVRBase::IO_exec()
 	quint8& reg = __state.GR[(__state.IR[0] & 0x01F0) >> 4];
 	if (__state.IR[0] & 0x0800)
 	{
+		CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("INPUT : PORT 0x%1 <- VALUE %2").arg(reg_index + 0x20, 2, 16, QChar('0')).arg(reg)));
 		port = reg;
 		emit IOChanged(port);
 	}
 	else
+	{
 		reg = port;
+		CallFunction<vm::ILogger>(vm::ILogger::InfoFunctor(QString("OUTPUT : PORT 0x%1 -> VALUE %2").arg(reg_index + 0x20, 2, 16, QChar('0')).arg(reg)));
+	}
 
 	return 2;
 }

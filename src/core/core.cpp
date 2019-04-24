@@ -18,6 +18,12 @@ void CCore::RegisterInterface(vm::IUnknown* pInterface)
 		s_mapPlugins[pInterface->GetUUID()].insert(pInterface);
 }
 
+void CCore::UnregisterInterface(vm::IUnknown* pInterface)
+{
+	if (pInterface != nullptr && s_mapPlugins[pInterface->GetUUID()].contains(pInterface))
+		s_mapPlugins.remove(pInterface->GetUUID());
+}
+
 QSet<vm::IUnknown*> CCore::QueryInterface(QString const& strInterfaceUUID)
 {
 	if (s_mapPlugins.contains(strInterfaceUUID))

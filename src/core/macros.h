@@ -16,6 +16,10 @@ public: \
 		__this = (__class__*)((unsigned long long)this - (unsigned long long)(&((__class__*)0)->m_x##__interface__)); \
 		GetCore()->RegisterInterface(this); \
 	} \
+	~X##__interface__() \
+	{ \
+		GetCore()->UnregisterInterface(this); \
+	} \
 	operator __class__##*() {return __this;}
 #define IMPLEMENT_END(__interface__) \
 } m_x##__interface__; \

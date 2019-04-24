@@ -14,6 +14,8 @@
 #include <QObject>
 #include <QMap>
 
+#include <chrono>
+
 class CRAM;
 
 class CPU_EXPORT CCPU : public QObject
@@ -79,6 +81,7 @@ private:
 	quint8 __inst_duration;
 	quint64 __last_inst_tick_count;
 	quint64 __tick_count;
+	std::chrono::steady_clock::time_point __creation_time;
 
 signals:
 	void IOChanged(quint32);

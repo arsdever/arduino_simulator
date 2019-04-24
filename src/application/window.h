@@ -1,14 +1,13 @@
 #pragma once
 
-#include <QWidget>
-#include <QLabel>
-#include <thread>
+#include <QMainWindow>
 #include "file_logger.h"
 
 class CCPU;
 class CTimer;
+class CTicker;
 
-class CWindow : public QLabel
+class CWindow : public QMainWindow
 {
 
 	Q_OBJECT
@@ -19,10 +18,10 @@ public:
 
 public slots:
 	void UpdateInfo();
+	void updateStatusBar();
 
 private:
 	CCPU* __cpu;
 	CTimer* __timer;
 	CFileLogger __logger;
-	std::thread* __timer_thread;
 };

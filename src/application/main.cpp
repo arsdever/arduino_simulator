@@ -1,9 +1,7 @@
 //#include <arduino_uno>
 //#include <receiver>
-#include <cpu>
-#include <ram>
+
 #include <QApplication>
-#include <QFile>
 #include "window.h"
 
 
